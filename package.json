@@ -10,14 +10,19 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@react-three/drei": "^10.0.5",
+        "@react-three/fiber": "^9.1.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "framer-motion": "^12.5.0",
+        "gsap": "^3.12.7",
         "lucide-react": "^0.483.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-router-dom": "^7.4.0",
-        "tailwind-merge": "^3.0.2"
+        "styled-components": "^6.1.16",
+        "tailwind-merge": "^3.0.2",
+        "three": "^0.174.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.21.0",

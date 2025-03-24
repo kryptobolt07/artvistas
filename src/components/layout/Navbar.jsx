@@ -25,20 +25,8 @@ export default function Navbar() {
     }
   };
 
-  // Check if current page has light background
-  const isLightBackground = () => {
-    const lightBackgroundRoutes = [
-      '/gallery',
-      '/collections',
-      '/artists',
-      '/exhibitions',
-      '/visit',
-      '/virtual-tour'
-    ];
-    return lightBackgroundRoutes.some(route => 
-      location.pathname === route || location.pathname.startsWith(`${route}/`)
-    );
-  };
+  // Check if current page is home page
+  const isHomePage = () => location.pathname === "/";
 
   // Reset loading state and menu state on location change
   useEffect(() => {
@@ -116,25 +104,28 @@ export default function Navbar() {
   const menuEasing = [0.25, 0.8, 0.25, 1];
 
   const getNavbarClasses = () => {
+    const homePageClasses = isScrolled ? 'backdrop-blur-sm bg-opacity-10' : 'bg-transparent';
+    const otherPagesClasses = 'bg-white shadow-md';
+    
     const baseClasses = "fixed top-0 left-0 w-full flex justify-between items-center p-6 z-50 transition-all duration-500";
-    return `${baseClasses} ${isScrolled ? 'backdrop-blur-sm bg-opacity-10' : 'bg-transparent'}`;
+    return `${baseClasses} ${isHomePage() ? homePageClasses : otherPagesClasses}`;
   };
 
-  const isDarkText = isLightBackground() || isScrolled;
+  const useWhiteText = isHomePage() && !isScrolled;
 
   const getTextClasses = (isLogo = false) => {
     const baseLogoClasses = "text-2xl font-bold transition-all";
     const baseLinkClasses = "transition-all";
     
     return isLogo 
-      ? `${baseLogoClasses} ${isDarkText ? 'text-gray-900' : 'text-white'} drop-shadow-sm hover:scale-105 transition-transform duration-300` 
-      : `${baseLinkClasses} ${isDarkText ? 'text-gray-800 hover:text-black' : 'text-gray-100 hover:text-white'}`;
+      ? `${baseLogoClasses} ${useWhiteText ? 'text-white' : 'text-gray-900'} drop-shadow-sm hover:scale-105 transition-transform duration-300` 
+      : `${baseLinkClasses} ${useWhiteText ? 'text-gray-100 hover:text-white' : 'text-gray-800 hover:text-black'}`;
   };
 
   const getIndicatorColor = (isActive = false) => {
-    return isDarkText 
-      ? (isActive ? 'bg-black' : 'bg-gray-400') 
-      : (isActive ? 'bg-white' : 'bg-gray-300');
+    return useWhiteText 
+      ? (isActive ? 'bg-white' : 'bg-gray-300') 
+      : (isActive ? 'bg-black' : 'bg-gray-400');
   };
 
   const waveX = `${menuPosition.x * 100}%`;
@@ -292,29 +283,29 @@ export default function Navbar() {
             >
               <motion.button
                 onClick={toggleMenu}
-                className={`w-10 h-10 rounded-full flex items-center justify-center group ${isDarkText ? 'hover:bg-black/5' : 'hover:bg-white/10'} transition-colors duration-300`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center group ${useWhiteText ? 'hover:bg-white/10' : 'hover:bg-black/5'} transition-colors duration-300`}
                 aria-label="Toggle menu"
               >
                 {isMenuOpen ? (
-                  <X size={28} className={`${isDarkText ? 'text-black' : 'text-white'} drop-shadow-sm`} />
+                  <X size={28} className={`${useWhiteText ? 'text-white' : 'text-black'} drop-shadow-sm`} />
                 ) : (
                   <div className="flex flex-col items-center justify-center w-6 h-6 space-y-1.5">
                     <motion.span 
-                      className={`block h-0.5 w-full rounded-full ${isDarkText ? 'bg-black' : 'bg-white'} shadow-sm`}
+                      className={`block h-0.5 w-full rounded-full ${useWhiteText ? 'bg-white' : 'bg-black'} shadow-sm`}
                       variants={hamburgerLineVariants}
                       initial="closed"
                       animate={isMenuOpen ? "open" : "closed"}
                       transition={{ duration: 0.3 }}
                     />
                     <motion.span 
-                      className={`block h-0.5 w-full rounded-full ${isDarkText ? 'bg-black' : 'bg-white'} shadow-sm`}
+                      className={`block h-0.5 w-full rounded-full ${useWhiteText ? 'bg-white' : 'bg-black'} shadow-sm`}
                       variants={hamburgerSecondLineVariants}
                       initial="closed"
                       animate={isMenuOpen ? "open" : "closed"}
                       transition={{ duration: 0.3 }}
                     />
                     <motion.span 
-                      className={`block h-0.5 w-3/4 rounded-full ${isDarkText ? 'bg-black' : 'bg-white'} shadow-sm self-end`}
+                      className={`block h-0.5 w-3/4 rounded-full ${useWhiteText ? 'bg-white' : 'bg-black'} shadow-sm self-end`}
                       variants={hamburgerThirdLineVariants}
                       initial="closed"
                       animate={isMenuOpen ? "open" : "closed"}
@@ -325,7 +316,7 @@ export default function Navbar() {
 
                 {/* Ripple effect on hover */}
                 <motion.div 
-                  className={`absolute inset-0 rounded-full -z-10 ${isDarkText ? 'bg-black/5' : 'bg-white/10'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                  className={`absolute inset-0 rounded-full -z-10 ${useWhiteText ? 'bg-white/10' : 'bg-black/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                   whileHover={{ 
                     scale: 1.2,
                     opacity: 1

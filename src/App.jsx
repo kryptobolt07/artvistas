@@ -3,7 +3,9 @@ import { AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import HomePage from './pages/HomePage';
 import GalleryPage from './pages/GalleryPage';
+import VirtualTourPage from './pages/VirtualTourPage';
 import PageTransition from './components/layout/PageTransition';
+import PageLayout from './components/layout/PageLayout';
 import Navbar from './components/layout/Navbar';
 import './index.css';
 
@@ -38,49 +40,51 @@ function AnimatedRoutes() {
       <Navbar />
       
       {/* Page Transitions and Routes */}
-      <AnimatePresence mode="wait" initial={true} onExitComplete={() => {
-        window.scrollTo(0, 0);
-        // Ensure body scroll is properly reset after transitions complete
-        document.body.style.overflow = '';
-      }}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={
-            <PageTransition key="home" clickPosition={clickPosition}>
-              <HomePage />
-            </PageTransition>
-          } />
-          <Route path="/gallery" element={
-            <PageTransition key="gallery" clickPosition={clickPosition}>
-              <GalleryPage />
-            </PageTransition>
-          } />
-          <Route path="/collections" element={
-            <PageTransition key="collections" clickPosition={clickPosition}>
-              <div className="min-h-screen flex items-center justify-center">Collections Page (Coming Soon)</div>
-            </PageTransition>
-          } />
-          <Route path="/virtual-tour" element={
-            <PageTransition key="virtual-tour" clickPosition={clickPosition}>
-              <div className="min-h-screen flex items-center justify-center">Virtual Tour Page (Coming Soon)</div>
-            </PageTransition>
-          } />
-          <Route path="/artists" element={
-            <PageTransition key="artists" clickPosition={clickPosition}>
-              <div className="min-h-screen flex items-center justify-center">Artists Page (Coming Soon)</div>
-            </PageTransition>
-          } />
-          <Route path="/exhibitions" element={
-            <PageTransition key="exhibitions" clickPosition={clickPosition}>
-              <div className="min-h-screen flex items-center justify-center">Exhibitions Page (Coming Soon)</div>
-            </PageTransition>
-          } />
-          <Route path="/visit" element={
-            <PageTransition key="visit" clickPosition={clickPosition}>
-              <div className="min-h-screen flex items-center justify-center">Visit Page (Coming Soon)</div>
-            </PageTransition>
-          } />
-        </Routes>
-      </AnimatePresence>
+      <PageLayout>
+        <AnimatePresence mode="wait" initial={true} onExitComplete={() => {
+          window.scrollTo(0, 0);
+          // Ensure body scroll is properly reset after transitions complete
+          document.body.style.overflow = '';
+        }}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={
+              <PageTransition key="home" clickPosition={clickPosition}>
+                <HomePage />
+              </PageTransition>
+            } />
+            <Route path="/gallery" element={
+              <PageTransition key="gallery" clickPosition={clickPosition}>
+                <GalleryPage />
+              </PageTransition>
+            } />
+            <Route path="/collections" element={
+              <PageTransition key="collections" clickPosition={clickPosition}>
+                <div className="min-h-screen flex items-center justify-center">Collections Page (Coming Soon)</div>
+              </PageTransition>
+            } />
+            <Route path="/virtual-tour" element={
+              <PageTransition key="virtual-tour" clickPosition={clickPosition}>
+                <VirtualTourPage />
+              </PageTransition>
+            } />
+            <Route path="/artists" element={
+              <PageTransition key="artists" clickPosition={clickPosition}>
+                <div className="min-h-screen flex items-center justify-center">Artists Page (Coming Soon)</div>
+              </PageTransition>
+            } />
+            <Route path="/exhibitions" element={
+              <PageTransition key="exhibitions" clickPosition={clickPosition}>
+                <div className="min-h-screen flex items-center justify-center">Exhibitions Page (Coming Soon)</div>
+              </PageTransition>
+            } />
+            <Route path="/visit" element={
+              <PageTransition key="visit" clickPosition={clickPosition}>
+                <div className="min-h-screen flex items-center justify-center">Visit Page (Coming Soon)</div>
+              </PageTransition>
+            } />
+          </Routes>
+        </AnimatePresence>
+      </PageLayout>
     </>
   );
 }

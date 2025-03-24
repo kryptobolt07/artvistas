@@ -1,0 +1,22 @@
+/* src/components/Gallery.css */
+.gallery-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+  
+  .gallery-container h2 {
+    text-align: center;
+  }
+  
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .artwork-item {
+    background-color: #e0e0e0;
+    padding: 20px;
+    text-align: center;
+  }
+  
