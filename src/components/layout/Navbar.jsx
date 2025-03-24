@@ -7,6 +7,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const hamburgerRef = useRef(null);
   const location = useLocation();
 
@@ -14,11 +15,20 @@ export default function Navbar() {
   const isHomePage = () => location.pathname === "/";
   const shouldUseWhiteText = () => isHomePage() && !isScrolled;
 
-  // Reset menu state on location change
+  // Reset menu state on location change and detect page transitions
   useEffect(() => {
     setIsMenuOpen(false);
     // Enable scrolling when navigating to a new page
     document.body.style.overflow = "auto";
+    
+    // Detect page transition animation
+    // When transitioning, we briefly show transition overlay
+    setIsTransitioning(true);
+    const transitionTimer = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1260); // Same as the wave animation duration in PageTransition
+
+    return () => clearTimeout(transitionTimer);
   }, [location]);
 
   // Update mobile state on resize
@@ -73,21 +83,23 @@ export default function Navbar() {
     { to: "/visit", label: "Visit" },
   ];
 
-  // Determine navbar appearance based on page and scroll position
-  const navbarClasses = shouldUseWhiteText()
-    ? "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-transparent backdrop-blur-sm transition-all duration-500 ease-in-out"
-    : "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-white/90 backdrop-blur-md shadow-lg transition-all duration-500 ease-in-out";
+  // Determine navbar appearance based on page, scroll position, and transition state
+  const navbarClasses = isTransitioning
+    ? "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-transparent transition-all duration-500 ease-in-out pointer-events-none opacity-0"
+    : shouldUseWhiteText()
+      ? "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-transparent backdrop-blur-sm transition-all duration-500 ease-in-out"
+      : "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-white/90 backdrop-blur-md shadow-lg transition-all duration-500 ease-in-out";
 
   // Determine text color based on page and scroll position
-  const logoTextColor = shouldUseWhiteText() ? "text-white" : "text-black";
-  const navLinkColor = shouldUseWhiteText() ? "text-gray-100 hover:text-white" : "text-gray-800 hover:text-black";
-  const indicatorColor = shouldUseWhiteText() ? "bg-white" : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500";
+  const logoTextColor = (isTransitioning || shouldUseWhiteText()) ? "text-white" : "text-black";
+  const navLinkColor = (isTransitioning || shouldUseWhiteText()) ? "text-gray-100 hover:text-white" : "text-gray-800 hover:text-black";
+  const indicatorColor = (isTransitioning || shouldUseWhiteText()) ? "bg-white" : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500";
 
   // Animation variants
   const logoVariants = {
     hover: { 
       scale: 1.05, 
-      textShadow: shouldUseWhiteText() ? "0px 0px 8px rgba(255,255,255,0.5)" : "0px 0px 8px rgba(0,0,0,0.3)" 
+      textShadow: (isTransitioning || shouldUseWhiteText()) ? "0px 0px 8px rgba(255,255,255,0.5)" : "0px 0px 8px rgba(0,0,0,0.3)" 
     }
   };
   
@@ -142,12 +154,12 @@ export default function Navbar() {
           <Link to="/" className={`text-2xl font-bold ${logoTextColor} transition-all duration-300 relative group`}>
             <span className="relative z-10">Art</span>
             <motion.span 
-              className={`relative z-10 bg-clip-text ${shouldUseWhiteText() ? "text-white" : "text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"}`}
+              className={`relative z-10 bg-clip-text ${(isTransitioning || shouldUseWhiteText()) ? "text-white" : "text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"}`}
             >
               Vistas
             </motion.span>
             <motion.div 
-              className={`absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full ${shouldUseWhiteText() ? "bg-white" : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"} transition-all duration-300`}
+              className={`absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full ${(isTransitioning || shouldUseWhiteText()) ? "bg-white" : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"} transition-all duration-300`}
             />
           </Link>
         </motion.div>
@@ -176,7 +188,7 @@ export default function Navbar() {
                       />
                     )}
                     <motion.div
-                      className={`absolute bottom-0 left-0 w-full h-[2px] ${shouldUseWhiteText() ? "bg-white/70" : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"} origin-left`}
+                      className={`absolute bottom-0 left-0 w-full h-[2px] ${(isTransitioning || shouldUseWhiteText()) ? "bg-white/70" : "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"} origin-left`}
                       initial={{ scaleX: 0 }}
                       whileHover={{ scaleX: 1 }}
                       transition={{ duration: 0.3 }}
@@ -197,7 +209,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.9 }}
             whileHover={{ 
               scale: 1.1, 
-              backgroundColor: shouldUseWhiteText() ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' 
+              backgroundColor: (isTransitioning || shouldUseWhiteText()) ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' 
             }}
             transition={{ duration: 0.2 }}
           >
@@ -223,14 +235,14 @@ export default function Navbar() {
                 />
               </motion.div>
             ) : (
-              // Compass icon for closed state - follows page context with rotation animation on hover
+              // Compass icon for closed state with rotation animation on hover
               <motion.div
                 whileHover={{ rotate: 45 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
                 <Compass 
                   size={36} 
-                  className={shouldUseWhiteText() ? "text-white" : "text-black"} 
+                  className={isTransitioning ? "text-white" : (shouldUseWhiteText() ? "text-white" : "text-black")} 
                   style={{ filter: 'none', boxShadow: 'none' }} 
                 />
               </motion.div>
