@@ -83,12 +83,16 @@ export default function Navbar() {
     { to: "/visit", label: "Visit" },
   ];
 
-  // Determine navbar appearance based on page, scroll position, and transition state
+  // Determine navbar appearance based on page, scroll position, and transition state with responsive padding
   const navbarClasses = isTransitioning
-    ? "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-transparent transition-all duration-500 ease-in-out pointer-events-none opacity-0"
+    ? "fixed top-0 left-0 w-full flex justify-between items-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 z-50 bg-transparent transition-all duration-500 ease-in-out pointer-events-none opacity-0"
     : shouldUseWhiteText()
-      ? "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-transparent backdrop-blur-sm transition-all duration-500 ease-in-out"
-      : "fixed top-0 left-0 w-full flex justify-between items-center px-8 py-6 z-50 bg-white/90 backdrop-blur-md shadow-lg transition-all duration-500 ease-in-out";
+      ? "fixed top-0 left-0 w-full flex justify-between items-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 z-50 bg-transparent transition-all duration-500 ease-in-out"
+      : "fixed top-0 left-0 w-full flex justify-between items-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 z-50 bg-white/90 shadow-lg transition-all duration-500 ease-in-out";
+
+  // Fixed backdrop blur layer with lower z-index (separate from content)
+  const backdropBlurClass = !isTransitioning && !isMenuOpen ? 
+    (shouldUseWhiteText() ? "backdrop-blur-sm" : "backdrop-blur-md") : "";
 
   // Determine text color based on page and scroll position
   const logoTextColor = (isTransitioning || shouldUseWhiteText()) ? "text-white" : "text-black";
@@ -138,8 +142,17 @@ export default function Navbar() {
     open: { opacity: 1, y: 0 }
   };
 
+  // Responsive icon size for the compass
+  const iconSize = isMobile ? 30 : 36;
+
   return (
     <>
+      {/* Separate backdrop blur div */}
+      {backdropBlurClass && (
+        <div className={`fixed top-0 left-0 w-full h-16 sm:h-[4.5rem] md:h-20 ${backdropBlurClass} z-40`} />
+      )}
+      
+      {/* Main navbar */}
       <motion.nav 
         className={navbarClasses}
         initial={{ y: -100 }}
@@ -151,7 +164,7 @@ export default function Navbar() {
           whileHover="hover"
           whileTap={{ scale: 0.98 }}
         >
-          <Link to="/" className={`text-2xl font-bold ${logoTextColor} transition-all duration-300 relative group`}>
+          <Link to="/" className={`text-xl sm:text-2xl font-bold ${logoTextColor} transition-all duration-300 relative group`}>
             <span className="relative z-10">Art</span>
             <motion.span 
               className={`relative z-10 bg-clip-text ${(isTransitioning || shouldUseWhiteText()) ? "text-white" : "text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"}`}
@@ -166,7 +179,7 @@ export default function Navbar() {
         
         <div className="flex items-center">
           {/* Desktop menu */}
-          <ul className={`gap-8 ${isMobile ? 'hidden' : 'flex'}`}>
+          <ul className={`gap-4 md:gap-6 lg:gap-8 ${isMobile ? 'hidden' : 'flex'}`}>
             {navLinks.map((link) => {
               const isActive = location.pathname === link.to;
               return (
@@ -177,7 +190,7 @@ export default function Navbar() {
                 >
                   <Link 
                     to={link.to} 
-                    className={`${navLinkColor} ${isActive ? 'font-medium' : ''} relative overflow-hidden`}
+                    className={`text-sm md:text-base ${navLinkColor} ${isActive ? 'font-medium' : ''} relative overflow-hidden`}
                   >
                     {link.label}
                     {isActive && (
@@ -199,123 +212,96 @@ export default function Navbar() {
             })}
           </ul>
           
-          {/* Mobile menu button */}
-          <motion.button
-            ref={hamburgerRef}
-            onClick={toggleMenu}
-            className={`ml-4 ${isMobile ? 'block' : 'hidden'} p-2 bg-transparent hover:bg-transparent focus:outline-none shadow-none outline-none border-0 rounded-full`}
-            aria-label="Toggle menu"
-            style={{ boxShadow: 'none', filter: 'none' }}
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ 
-              scale: 1.1, 
-              backgroundColor: (isTransitioning || shouldUseWhiteText()) ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' 
-            }}
-            transition={{ duration: 0.2 }}
-          >
-            {isMenuOpen ? (
-              // X should be black on all pages
-              <motion.div 
-                className="w-7 h-7 flex items-center justify-center bg-transparent"
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 90 }}
-                transition={{ duration: 0.3 }}
-              >
-                <motion.div 
-                  className="w-6 h-0.5 bg-black absolute"
-                  initial={{ rotate: 0 }}
-                  animate={{ rotate: 45 }}
-                  transition={{ duration: 0.3 }}
-                />
-                <motion.div 
-                  className="w-6 h-0.5 bg-black absolute"
-                  initial={{ rotate: 0 }}
-                  animate={{ rotate: -45 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
-            ) : (
-              // Compass icon for closed state with rotation animation on hover
-              <motion.div
-                whileHover={{ rotate: 45 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                <Compass 
-                  size={36} 
-                  className={isTransitioning ? "text-white" : (shouldUseWhiteText() ? "text-white" : "text-black")} 
-                  style={{ filter: 'none', boxShadow: 'none' }} 
-                />
-              </motion.div>
-            )}
-          </motion.button>
+          {/* Mobile menu button placeholder - actual button is below */}
+          <div className={`ml-4 ${isMobile ? 'block' : 'hidden'} w-[30px] h-[30px] sm:w-[36px] sm:h-[36px]`}></div>
         </div>
       </motion.nav>
+      
+      {/* Mobile menu toggle button - fixed position so it's always accessible */}
+      {isMobile && (
+        <motion.button
+          ref={hamburgerRef}
+          onClick={toggleMenu}
+          className="fixed top-4 right-4 sm:top-5 sm:right-6 md:top-6 md:right-8 p-2 bg-transparent hover:bg-transparent focus:outline-none shadow-none outline-none border-0 rounded-full isolate z-[200]"
+          aria-label="Toggle menu"
+          style={{ boxShadow: 'none', filter: 'none' }}
+          whileTap={{ scale: 0.9 }}
+          whileHover={{ 
+            scale: 1.1, 
+            backgroundColor: (isTransitioning || shouldUseWhiteText() || isMenuOpen) ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' 
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          {isMenuOpen ? (
+            // X icon when menu is open
+            <motion.div 
+              className="w-7 h-7 flex items-center justify-center bg-transparent"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 90 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div 
+                className="w-6 h-0.5 bg-black absolute"
+                initial={{ rotate: 0 }}
+                animate={{ rotate: 45 }}
+                transition={{ duration: 0.3 }}
+              />
+              <motion.div 
+                className="w-6 h-0.5 bg-black absolute"
+                initial={{ rotate: 0 }}
+                animate={{ rotate: -45 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+          ) : (
+            // Compass icon when menu is closed
+            <motion.div
+              whileHover={{ rotate: 45 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="isolate"
+            >
+              <Compass 
+                size={iconSize} 
+                className={isTransitioning ? "text-white" : (shouldUseWhiteText() ? "text-white" : "text-black")} 
+                style={{ filter: 'none', boxShadow: 'none' }} 
+              />
+            </motion.div>
+          )}
+        </motion.button>
+      )}
 
       {/* Mobile menu overlay */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-gradient-to-br from-white via-white to-gray-100 z-40"
+            className="fixed inset-0 bg-gradient-to-br from-white via-white to-gray-100 z-[100]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
           >
             <motion.div 
-              className="flex flex-col items-center justify-center h-full"
+              className="flex flex-col items-center justify-center h-full w-full"
               variants={mobileMenuVariants}
               initial="closed"
               animate="open"
               exit="closed"
             >
-              {/* Close button at the top right */}
-              <div className="absolute top-6 right-6">
-                <motion.button
-                  onClick={toggleMenu}
-                  className="p-2 bg-transparent hover:bg-gray-100 focus:outline-none rounded-full transition-colors duration-300"
-                  aria-label="Close menu"
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.05)' }}
-                >
-                  <div className="w-7 h-7 flex items-center justify-center">
-                    <div className="w-6 h-0.5 bg-black absolute transform rotate-45"></div>
-                    <div className="w-6 h-0.5 bg-black absolute transform -rotate-45"></div>
-                  </div>
-                </motion.button>
-              </div>
-              
-              {/* Decorative element */}
-              <motion.div
-                className="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-indigo-100 to-transparent rounded-full blur-3xl opacity-60"
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 0.6 }}
-                exit={{ x: -100, opacity: 0 }}
-                transition={{ duration: 0.8 }}
-              />
-              
-              <motion.div
-                className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-pink-100 to-transparent rounded-full blur-3xl opacity-60"
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 0.6 }}
-                exit={{ y: 100, opacity: 0 }}
-                transition={{ duration: 0.8 }}
-              />
-              
-              {/* Menu items */}
-              <div className="flex flex-col items-center justify-center gap-8 relative z-10">
+              {/* Menu items with higher z-index */}
+              <div className="flex flex-col items-center justify-center gap-8 relative px-6 text-center w-full">
                 {navLinks.map((link, index) => {
                   const isActive = location.pathname === link.to;
                   return (
                     <motion.div
                       key={link.to}
                       variants={mobileItemVariants}
-                      className="overflow-hidden"
+                      className="overflow-hidden w-full"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       <Link 
                         to={link.to} 
-                        className={`text-3xl font-medium ${isActive ? 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600' : 'text-gray-700 hover:text-black'} relative`}
+                        className={`text-2xl sm:text-3xl font-medium ${isActive ? 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600' : 'text-gray-700 hover:text-black'} relative block`}
                         onClick={toggleMenu}
                       >
                         {link.label}
@@ -331,6 +317,23 @@ export default function Navbar() {
                   );
                 })}
               </div>
+              
+              {/* Decorative elements */}
+              <motion.div
+                className="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-indigo-100 to-transparent rounded-full blur-3xl opacity-60"
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 0.6 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ duration: 0.8 }}
+              />
+              
+              <motion.div
+                className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-pink-100 to-transparent rounded-full blur-3xl opacity-60"
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 0.6 }}
+                exit={{ y: 100, opacity: 0 }}
+                transition={{ duration: 0.8 }}
+              />
             </motion.div>
           </motion.div>
         )}
