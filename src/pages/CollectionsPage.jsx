@@ -57,7 +57,9 @@ export default function CollectionsPage() {
             <img 
               src={selectedStory.image} 
               alt={selectedStory.title} 
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover ${
+                selectedStory.id === 'mona-lisa' ? 'object-center' : ''
+              }`}
             />
           </div>
           
@@ -118,7 +120,9 @@ export default function CollectionsPage() {
                   <img 
                     src={story.image} 
                     alt={story.title} 
-                    className="w-full h-full object-cover transition-transform hover:scale-110" 
+                    className={`w-full h-full object-cover transition-transform hover:scale-110 ${
+                      story.id === 'mona-lisa' ? 'object-center' : ''
+                    }`}
                   />
                 </div>
                 <div className="p-4 text-center font-semibold text-lg">{story.title}</div>
@@ -174,7 +178,9 @@ export default function CollectionsPage() {
                 <img 
                   src={category.image} 
                   alt={category.name} 
-                  className="w-full h-full object-cover transition-transform hover:scale-110" 
+                  className={`w-full h-full object-cover transition-transform hover:scale-110 ${
+                    category.id === 'art' ? 'object-center' : ''
+                  }`}
                 />
               </div>
               <div className="p-4 text-center font-semibold text-xl">{category.name}</div>
