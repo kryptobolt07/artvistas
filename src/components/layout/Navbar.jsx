@@ -77,6 +77,7 @@ export default function Navbar() {
     { to: "/", label: "Home" },
     { to: "/collections", label: "Collections" },
     { to: "/virtual-tour", label: "Virtual Tour" },
+    { to: "/storytelling", label: "Storytelling" },
     { to: "/#artists", label: "Artists" },
     { to: "/exhibitions", label: "Exhibitions" },
     { to: "/gallery", label: "Gallery" },

@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import GalleryPage from './pages/GalleryPage';
 import VirtualTourPage from './pages/VirtualTourPage';
 import CollectionsPage from './pages/CollectionsPage';
+import StorytellingPage from './pages/StorytellingPage';
 import PageTransition from './components/layout/PageTransition';
 import PageLayout from './components/layout/PageLayout';
 import Navbar from './components/layout/Navbar';
@@ -98,6 +99,11 @@ function AnimatedRoutes() {
             <Route path="/virtual-tour" element={
               <PageTransition key="virtual-tour" clickPosition={clickPosition}>
                 <VirtualTourPage />
+              </PageTransition>
+            } />
+            <Route path="/storytelling" element={
+              <PageTransition key="storytelling" clickPosition={clickPosition}>
+                <StorytellingPage />
               </PageTransition>
             } />
             <Route path="/exhibitions" element={
