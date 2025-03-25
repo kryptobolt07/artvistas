@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import HomePage from './pages/HomePage';
 import GalleryPage from './pages/GalleryPage';
 import VirtualTourPage from './pages/VirtualTourPage';
+import CollectionsPage from './pages/CollectionsPage';
 import PageTransition from './components/layout/PageTransition';
 import PageLayout from './components/layout/PageLayout';
 import Navbar from './components/layout/Navbar';
@@ -59,7 +60,7 @@ function AnimatedRoutes() {
             } />
             <Route path="/collections" element={
               <PageTransition key="collections" clickPosition={clickPosition}>
-                <div className="min-h-screen flex items-center justify-center">Collections Page (Coming Soon)</div>
+                <CollectionsPage />
               </PageTransition>
             } />
             <Route path="/virtual-tour" element={
