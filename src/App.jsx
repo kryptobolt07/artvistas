@@ -6,6 +6,7 @@ import GalleryPage from './pages/GalleryPage';
 import VirtualTourPage from './pages/VirtualTourPage';
 import CollectionsPage from './pages/CollectionsPage';
 import StorytellingPage from './pages/StorytellingPage';
+import VisitPage from './pages/VisitPage';
 import PageTransition from './components/layout/PageTransition';
 import PageLayout from './components/layout/PageLayout';
 import Navbar from './components/layout/Navbar';
@@ -132,7 +133,7 @@ function AnimatedRoutes() {
             } />
             <Route path="/visit" element={
               <PageTransition key="visit" clickPosition={clickPosition}>
-                <div className="min-h-screen flex items-center justify-center">Visit Page (Coming Soon)</div>
+                <VisitPage />
               </PageTransition>
             } />
           </Routes>
