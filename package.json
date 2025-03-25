@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+  	"vercel-build": "npm install --legacy-peer-deps && npm run build",
         "build": "vite build",
         "lint": "eslint .",
         "preview": "vite preview"
@@ -42,3 +43,4 @@
         "vite": "^6.2.0"
     }
 }
+
