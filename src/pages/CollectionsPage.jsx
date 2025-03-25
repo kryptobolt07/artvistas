@@ -58,7 +58,7 @@ export default function CollectionsPage() {
               src={selectedStory.image} 
               alt={selectedStory.title} 
               className={`w-full h-full object-cover ${
-                selectedStory.id === 'mona-lisa' ? 'object-center' : ''
+                selectedStory.id === 'mona-lisa' ? 'object-top' : ''
               }`}
             />
           </div>
@@ -121,7 +121,7 @@ export default function CollectionsPage() {
                     src={story.image} 
                     alt={story.title} 
                     className={`w-full h-full object-cover transition-transform hover:scale-110 ${
-                      story.id === 'mona-lisa' ? 'object-center' : ''
+                      story.id === 'mona-lisa' ? 'object-top' : ''
                     }`}
                   />
                 </div>
@@ -179,7 +179,7 @@ export default function CollectionsPage() {
                   src={category.image} 
                   alt={category.name} 
                   className={`w-full h-full object-cover transition-transform hover:scale-110 ${
-                    category.id === 'art' ? 'object-center' : ''
+                    category.id === 'art' ? 'object-top' : ''
                   }`}
                 />
               </div>
