@@ -318,21 +318,22 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-gradient-to-br from-white via-white to-gray-100 z-[100]"
+            className="fixed inset-0 bg-gradient-to-br from-white via-white to-gray-100 z-[100] overflow-y-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
+            style={{ maxHeight: "100vh" }}
           >
             <motion.div 
-              className="flex flex-col items-center justify-center h-full w-full"
+              className="flex flex-col items-center py-24 w-full min-h-screen"
               variants={mobileMenuVariants}
               initial="closed"
               animate="open"
               exit="closed"
             >
               {/* Menu items with higher z-index */}
-              <div className="flex flex-col items-center justify-center gap-8 relative px-6 text-center w-full">
+              <div className="flex flex-col items-center justify-center gap-8 relative px-6 text-center w-full mt-4">
                 {navLinks.map((link, index) => {
                   const isActive = location.pathname === link.to || (link.to.includes('#') && location.pathname === '/' && location.hash === link.to.substring(1));
                   return (
