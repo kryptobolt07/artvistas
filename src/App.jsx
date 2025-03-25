@@ -49,10 +49,23 @@ function AnimatedRoutes() {
           element.scrollIntoView({ behavior: 'smooth' });
         }, 700);
       }
-    } else {
-      // If no hash, scroll to top
+    } else if (sessionStorage.getItem('scrollToArtists') && location.pathname === '/') {
+      // If we have the flag and we're on the home page, scroll to artists after a delay
+      // This is a fallback in case the direct hash navigation doesn't work
+      sessionStorage.removeItem('scrollToArtists');
+      setTimeout(() => {
+        const artistsSection = document.getElementById('artists');
+        if (artistsSection) {
+          artistsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 700);
+    } else if (location.pathname === '/' && !sessionStorage.getItem('noAutoScroll')) {
+      // If no hash and we're on the home page, scroll to top
       window.scrollTo(0, 0);
     }
+    
+    // Clear the no auto scroll flag if it exists
+    sessionStorage.removeItem('noAutoScroll');
   }, [location]);
   
   return (

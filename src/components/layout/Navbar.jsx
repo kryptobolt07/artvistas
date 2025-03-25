@@ -146,22 +146,32 @@ export default function Navbar() {
   const iconSize = isMobile ? 30 : 36;
 
   const handleLinkClick = (e, to) => {
-    // If it's a hash link and we're on the home page, prevent default and manually scroll
-    if (to.includes('#') && location.pathname === '/') {
-      e.preventDefault();
-      const id = to.split('#')[1];
-      const element = document.getElementById(id);
+    // If it's a hash link to the artists section
+    if (to.includes('#artists')) {
+      // Close mobile menu if open
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
       
-      if (element) {
-        // Close mobile menu if open
-        if (isMenuOpen) {
-          setIsMenuOpen(false);
-        }
+      // If we're already on the home page, just scroll to the element
+      if (location.pathname === '/') {
+        e.preventDefault();
+        const id = to.split('#')[1];
+        const element = document.getElementById(id);
         
-        // Scroll to the element
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        if (element) {
+          // Set a flag to prevent auto-scrolling to top
+          sessionStorage.setItem('noAutoScroll', 'true');
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      } 
+      // If we're NOT on the home page, let default navigation happen
+      // but set the flag to scroll to artists after navigation
+      else {
+        sessionStorage.setItem('scrollToArtists', 'true');
+        // Let the default navigation happen (to '/#artists')
       }
     } else if (isMenuOpen) {
       // Just close the mobile menu for non-hash links
