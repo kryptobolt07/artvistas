@@ -9,24 +9,24 @@ function StorytellingPage() {
   return (
     <div className="min-h-screen relative">
       {/* Story selector */}
-      <div className="absolute top-4 left-4 right-4 z-50 flex justify-center">
-        <div className="bg-white/20 backdrop-blur-md rounded-full p-1 shadow-lg flex flex-col sm:flex-row w-full max-w-xs sm:max-w-md mx-auto">
+      <div className="absolute top-4 left-0 right-0 z-50 flex justify-center">
+        <div className="bg-white/30 backdrop-blur-md rounded-full p-1 shadow-xl flex flex-row w-full max-w-xs sm:max-w-md mx-auto border border-white/40">
           <button
             onClick={() => setSelectedStory('atlantis')}
-            className={`px-4 sm:px-6 py-2 rounded-full text-white font-medium transition-all duration-300 text-sm sm:text-base ${
+            className={`flex-1 px-4 sm:px-6 py-3 rounded-full font-medium transition-all duration-300 text-sm sm:text-base ${
               selectedStory === 'atlantis' 
-                ? 'bg-blue-600 shadow-md' 
-                : 'hover:bg-white/10'
-            } ${selectedStory !== 'atlantis' && 'mb-1 sm:mb-0'}`}
+                ? 'bg-sky-400 text-white shadow-lg' 
+                : 'text-gray-800 hover:bg-white/20'
+            }`}
           >
             Atlantis
           </button>
           <button
             onClick={() => setSelectedStory('pyramids')}
-            className={`px-4 sm:px-6 py-2 rounded-full text-white font-medium transition-all duration-300 text-sm sm:text-base ${
+            className={`flex-1 px-4 sm:px-6 py-3 rounded-full font-medium transition-all duration-300 text-sm sm:text-base ${
               selectedStory === 'pyramids' 
-                ? 'bg-amber-600 shadow-md' 
-                : 'hover:bg-white/10'
+                ? 'bg-amber-400 text-white shadow-lg' 
+                : 'text-gray-800 hover:bg-white/20'
             }`}
           >
             Pyramids of Giza

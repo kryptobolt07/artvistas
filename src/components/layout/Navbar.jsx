@@ -79,7 +79,7 @@ export default function Navbar() {
     { to: "/virtual-tour", label: "Virtual Tour" },
     { to: "/storytelling", label: "Storytelling" },
     { to: "/#artists", label: "Artists" },
-    { to: "/exhibitions", label: "Exhibitions" },
+    { to: "/#exhibitions", label: "Exhibitions" },
     { to: "/gallery", label: "Gallery" },
     { to: "/visit", label: "Visit" },
   ];
@@ -147,8 +147,8 @@ export default function Navbar() {
   const iconSize = isMobile ? 30 : 36;
 
   const handleLinkClick = (e, to) => {
-    // If it's a hash link to the artists section
-    if (to.includes('#artists')) {
+    // If it's a hash link to the artists or exhibitions section
+    if (to.includes('#artists') || to.includes('#exhibitions')) {
       // Close mobile menu if open
       if (isMenuOpen) {
         setIsMenuOpen(false);
@@ -169,10 +169,11 @@ export default function Navbar() {
         }
       } 
       // If we're NOT on the home page, let default navigation happen
-      // but set the flag to scroll to artists after navigation
+      // but set the flag to scroll to the appropriate section after navigation
       else {
-        sessionStorage.setItem('scrollToArtists', 'true');
-        // Let the default navigation happen (to '/#artists')
+        const sectionId = to.split('#')[1];
+        sessionStorage.setItem(`scrollTo${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}`, 'true');
+        // Let the default navigation happen (to '/#section')
       }
     } else if (isMenuOpen) {
       // Just close the mobile menu for non-hash links

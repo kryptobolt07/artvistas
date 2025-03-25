@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import HomePage from './pages/HomePage';
@@ -60,6 +60,15 @@ function AnimatedRoutes() {
           artistsSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 700);
+    } else if (sessionStorage.getItem('scrollToExhibitions') && location.pathname === '/') {
+      // If we have the flag and we're on the home page, scroll to exhibitions after a delay
+      sessionStorage.removeItem('scrollToExhibitions');
+      setTimeout(() => {
+        const exhibitionsSection = document.getElementById('exhibitions');
+        if (exhibitionsSection) {
+          exhibitionsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 700);
     } else if (location.pathname === '/' && !sessionStorage.getItem('noAutoScroll')) {
       // If no hash and we're on the home page, scroll to top
       window.scrollTo(0, 0);
@@ -68,6 +77,16 @@ function AnimatedRoutes() {
     // Clear the no auto scroll flag if it exists
     sessionStorage.removeItem('noAutoScroll');
   }, [location]);
+
+  // For handling the exhibitions redirect
+  const ExhibitionsRedirect = () => {
+    useEffect(() => {
+      // Set flag to scroll to exhibitions section after navigation
+      sessionStorage.setItem('scrollToExhibitions', 'true');
+    }, []);
+
+    return <Navigate to="/" replace />;
+  };
   
   return (
     <>
@@ -107,8 +126,8 @@ function AnimatedRoutes() {
               </PageTransition>
             } />
             <Route path="/exhibitions" element={
-              <PageTransition key="exhibitions" clickPosition={clickPosition}>
-                <div className="min-h-screen flex items-center justify-center">Exhibitions Page (Coming Soon)</div>
+              <PageTransition key="exhibitions-redirect" clickPosition={clickPosition}>
+                <ExhibitionsRedirect />
               </PageTransition>
             } />
             <Route path="/visit" element={

@@ -4,6 +4,22 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
+  // Function to scroll to exhibitions section
+  const scrollToExhibitions = () => {
+    const exhibitionsSection = document.getElementById('exhibitions');
+    if (exhibitionsSection) {
+      exhibitionsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Function to scroll to artists section
+  const scrollToArtists = () => {
+    const artistsSection = document.getElementById('artists');
+    if (artistsSection) {
+      artistsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black text-white">
       {/* Video Background */}
@@ -51,6 +67,27 @@ export default function HeroSection() {
               Explore Collections
             </Button>
           </Link>
+        </motion.div>
+
+        {/* Quick Navigation Links */}
+        <motion.div 
+          className="mt-6 flex gap-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8, ease: [0.25, 0.8, 0.25, 1] }}
+        >
+          <button 
+            onClick={scrollToArtists}
+            className="text-white underline-offset-4 hover:underline"
+          >
+            Featured Artists
+          </button>
+          <button 
+            onClick={scrollToExhibitions}
+            className="text-white underline-offset-4 hover:underline"
+          >
+            Current Exhibitions
+          </button>
         </motion.div>
         
         {/* Scroll Indicator */}
