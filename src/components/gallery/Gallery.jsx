@@ -33,7 +33,7 @@ const artworks = [
   }
 ];
 
-export default function Carousel() {
+export default function Gallery() {
   const listRef = useRef(null);
   const loaderRef = useRef(null);
   const autoPlayRef = useRef(null);

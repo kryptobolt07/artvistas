@@ -34,6 +34,26 @@ function AnimatedRoutes() {
       document.removeEventListener('click', handleNavClick, true);
     };
   }, []);
+
+  // Handle hash navigation - scroll to section on hash change
+  useEffect(() => {
+    // Check if the URL contains a hash
+    if (location.hash) {
+      // Get the target element by id (remove # from hash)
+      const id = location.hash.substring(1);
+      const element = document.getElementById(id);
+      
+      if (element) {
+        // Wait a bit for page transition to complete, then scroll
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 700);
+      }
+    } else {
+      // If no hash, scroll to top
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
   
   return (
     <>
@@ -43,7 +63,6 @@ function AnimatedRoutes() {
       {/* Page Transitions and Routes */}
       <PageLayout>
         <AnimatePresence mode="wait" initial={true} onExitComplete={() => {
-          window.scrollTo(0, 0);
           // Ensure body scroll is properly reset after transitions complete
           document.body.style.overflow = '';
         }}>
@@ -66,11 +85,6 @@ function AnimatedRoutes() {
             <Route path="/virtual-tour" element={
               <PageTransition key="virtual-tour" clickPosition={clickPosition}>
                 <VirtualTourPage />
-              </PageTransition>
-            } />
-            <Route path="/artists" element={
-              <PageTransition key="artists" clickPosition={clickPosition}>
-                <div className="min-h-screen flex items-center justify-center">Artists Page (Coming Soon)</div>
               </PageTransition>
             } />
             <Route path="/exhibitions" element={

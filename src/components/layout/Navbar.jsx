@@ -77,7 +77,7 @@ export default function Navbar() {
     { to: "/", label: "Home" },
     { to: "/collections", label: "Collections" },
     { to: "/virtual-tour", label: "Virtual Tour" },
-    { to: "/artists", label: "Artists" },
+    { to: "/#artists", label: "Artists" },
     { to: "/exhibitions", label: "Exhibitions" },
     { to: "/gallery", label: "Gallery" },
     { to: "/visit", label: "Visit" },
@@ -145,6 +145,38 @@ export default function Navbar() {
   // Responsive icon size for the compass
   const iconSize = isMobile ? 30 : 36;
 
+  const handleLinkClick = (e, to) => {
+    // If it's a hash link and we're on the home page, prevent default and manually scroll
+    if (to.includes('#') && location.pathname === '/') {
+      e.preventDefault();
+      const id = to.split('#')[1];
+      const element = document.getElementById(id);
+      
+      if (element) {
+        // Close mobile menu if open
+        if (isMenuOpen) {
+          setIsMenuOpen(false);
+        }
+        
+        // Scroll to the element
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else if (isMenuOpen) {
+      // Just close the mobile menu for non-hash links
+      setIsMenuOpen(false);
+      
+      // Additional delay for gallery page to ensure proper page transition
+      if (to === '/gallery') {
+        e.preventDefault();
+        setTimeout(() => {
+          window.location.href = to;
+        }, 300);
+      }
+    }
+  };
+
   return (
     <>
       {/* Separate backdrop blur div */}
@@ -181,7 +213,7 @@ export default function Navbar() {
           {/* Desktop menu */}
           <ul className={`gap-4 md:gap-6 lg:gap-8 ${isMobile ? 'hidden' : 'flex'}`}>
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.to;
+              const isActive = location.pathname === link.to || (link.to.includes('#') && location.pathname === '/' && location.hash === link.to.substring(1));
               return (
                 <motion.li key={link.to} className="relative"
                   variants={linkVariants}
@@ -191,6 +223,7 @@ export default function Navbar() {
                   <Link 
                     to={link.to} 
                     className={`text-sm md:text-base ${navLinkColor} ${isActive ? 'font-medium' : ''} relative overflow-hidden`}
+                    onClick={(e) => handleLinkClick(e, link.to)}
                   >
                     {link.label}
                     {isActive && (
@@ -270,7 +303,7 @@ export default function Navbar() {
         </motion.button>
       )}
 
-      {/* Mobile menu overlay */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -290,7 +323,7 @@ export default function Navbar() {
               {/* Menu items with higher z-index */}
               <div className="flex flex-col items-center justify-center gap-8 relative px-6 text-center w-full">
                 {navLinks.map((link, index) => {
-                  const isActive = location.pathname === link.to;
+                  const isActive = location.pathname === link.to || (link.to.includes('#') && location.pathname === '/' && location.hash === link.to.substring(1));
                   return (
                     <motion.div
                       key={link.to}
@@ -302,7 +335,7 @@ export default function Navbar() {
                       <Link 
                         to={link.to} 
                         className={`text-2xl sm:text-3xl font-medium ${isActive ? 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600' : 'text-gray-700 hover:text-black'} relative block`}
-                        onClick={toggleMenu}
+                        onClick={(e) => handleLinkClick(e, link.to)}
                       >
                         {link.label}
                         {isActive && (
